@@ -458,8 +458,6 @@ documentsInput.addEventListener("change", function () {
 
 // ✅ Gestion de la soumission du formulaire (Compatible Netlify)
 function submitForm(event) {
-    event.preventDefault(); // Empêche l'envoi par défaut du navigateur
-
     // ✅ Vérification des champs obligatoires
     let form = document.getElementById("taxForm");
     let formData = new FormData(form);
@@ -510,7 +508,6 @@ travailleurAutonome.addEventListener("change", updateTarification);
 document.addEventListener("DOMContentLoaded", function () {
     updateTarification();
     updateStepVisibility();
-    handleConjointAdresseChange();
 });
 
 document.addEventListener("DOMContentLoaded", function () {
