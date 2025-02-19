@@ -1,0 +1,300 @@
+/* Définition des couleurs et styles globaux */
+:root {
+    --dark-gray: #494D5A;
+    --primary-blue: #2B3CAB;
+    --dark-blue: #132669;
+    --light-blue: #97A9B8;
+    --background: #f5f7fa;
+    --green: #28a745;
+    --border-radius: 8px;
+    --transition-speed: 0.3s ease-in-out;
+}
+
+/* 🌍 Réinitialisation globale */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+}
+
+body {
+    background-color: #f8f9fa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+/* 📦 Conteneur principal du formulaire */
+.form-container {
+    width: 100%;
+    max-width: 800px;
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* 🎯 Titres */
+h1 {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 10px;
+    color: #34495e;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    padding-bottom: 5px;
+}
+
+h2 {
+    font-size: 20px;
+    color: #34495e;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    border-bottom: 3px solid #3498db;
+    padding-bottom: 5px;
+}
+
+h3 {
+    font-size: 18px;
+    color: #2c3e50;
+    margin-bottom: 10px;
+}
+
+/* ✅ Cache les étapes non actives sans changer leur ordre */
+.hidden {
+    opacity: 0;
+    height: 0;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+/* ✅ Cache uniquement les sections qui doivent être cachées selon les conditions */
+.hidden-section {
+    display: none;
+} 
+/* Met l’étoile rouge pour les champs obligatoires */
+label::after {
+    content: " *";
+    color: red;
+    font-weight: bold;
+}
+
+/* Style des champs invalides */
+.invalid {
+    border: 2px solid red !important;
+    background-color: #ffe6e6;
+}
+
+/* Style des messages d’erreur */
+.error-message {
+    color: red;
+    font-size: 14px;
+    margin-top: 5px;
+    display: block;
+    font-weight: bold;
+}
+
+/* 📝 Champs de formulaire */
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+/* Champs de texte et sélecteurs */
+input, select {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    border: 1px solid #bdc3c7;
+    border-radius: 5px;
+    outline: none;
+    transition: 0.3s;
+}
+
+input:focus, select:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+}
+
+/* 📐 Disposition des champs en ligne */
+.input-group {
+    display: flex;
+    gap: 10px;
+}
+
+.input-group input {
+    flex: 1;
+}
+
+/* 🔘 Gestion des options radio */
+.radio-group {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.radio-group label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 14px;
+}
+
+/* 📍 Boutons de navigation */
+.btn-container {
+    display: flex;
+    justify-content: center; 
+    gap: 20px; 
+    margin-top: 20px; 
+}
+
+.btn-primary, .btn-secondary {
+    padding: 12px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-secondary:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.btn-primary {
+    background-color: #3498db;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #02253d;
+}
+
+.btn-secondary {
+    background-color: #bdc3c7;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background-color: #575d5e;
+}
+
+/* 📌 Sections du formulaire */
+.form-section {
+    display: none;
+}
+
+.form-section.active {
+    display: block;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+/* 🌟 Animation fluide */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 💰 Tarification */
+.tarification {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px 0;
+}
+
+.tarif {
+    flex: 1;
+    text-align: center;
+    padding: 15px;
+    border-radius: 5px;
+    background-color: #ecf0f1;
+}
+
+.tarif h3 {
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+.tarif p {
+    font-size: 22px;
+    font-weight: bold;
+    color: #27ae60;
+}
+
+/* 📤 Upload de fichiers */
+.file-upload {
+    text-align: center;
+    border: 2px dashed #bdc3c7;
+    padding: 15px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.file-upload:hover {
+    border-color: #3498db;
+}
+
+.file-upload input {
+    display: none;
+}
+
+.upload-label span {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.confirmation-container {
+    text-align: center;
+    background: white;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 100px auto;
+}
+
+.confirmation-container h2 {
+    color: #28a745;
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.confirmation-container p {
+    font-size: 18px;
+    color: #555;
+}
+
+/* 📱 Responsive Design */
+@media (max-width: 768px) {
+    .input-group {
+        flex-direction: column;
+    }
+
+    .btn-container {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .tarification {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
