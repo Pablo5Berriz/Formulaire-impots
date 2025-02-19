@@ -197,10 +197,11 @@ function genererChampsEnfants(nombre) {
     });
 }
 
+
 function genererChampsConjoint() {
     const conjointsContainer = document.getElementById("conjoints-container");
     const etatCivilValue = document.getElementById("etat-civil").value;
-    const sectionConjoint = document.getElementById("infos-conjoints"); // Section dédiée aux conjoints
+    const sectionConjoint = document.getElementById("infos-conjoints"); 
 
     // ✅ Vérification si on est dans la section 4 avant d'afficher le formulaire
     if (currentStep !== 4) {
@@ -213,27 +214,25 @@ function genererChampsConjoint() {
         sectionConjoint.style.display = "block";
     } else {
         sectionConjoint.style.display = "none";
-        return; // Ne pas ajouter de champs si l'utilisateur n'est pas marié ou conjoint
+        return; 
     }
 
     // ✅ Vérifier si les champs existent déjà pour éviter la duplication
     if (!document.querySelector(".conjoint-section")) {
         let conjointHtml = `
             <div class="form-group conjoint-section">
-                <h3>Informations sur l'époux(se) ou conjoint(e) de fait</h3>
-                
-                <label>Nom </label>
+                <label>Nom <span style='color: red;'>*</span></label>
                 <div class="input-group">
-                    <input type="text" placeholder="Prénom" required>
-                    <input type="text" placeholder="Deuxième prénom">
-                    <input type="text" placeholder="Nom de famille" required>
+                    <input type="text" name="conjoint-prenom" placeholder="Prénom" required>
+                    <input type="text" name="conjoint-deuxieme-prenom" placeholder="Deuxième prénom">
+                    <input type="text" name="conjoint-nom" placeholder="Nom de famille" required>
                 </div>
 
-                <label>Date de naissance </label>
-                <input type="date" required>
+                <label>Date de naissance <span style='color: red;'>*</span></label>
+                <input type="date" name="conjoint-dob" required>
 
-                <label>Numéro d'assurance sociale </label>
-                <input type="text" placeholder="ex: 123123123" required>
+                <label>Numéro d'assurance sociale <span style='color: red;'>*</span></label>
+                <input type="text" name="conjoint-num-as" placeholder="ex: 123123123" required>
 
                 <h4>Où vit l'époux(se) ou conjoint(e) de fait?</h4>
                 <div class="radio-group">
@@ -241,17 +240,17 @@ function genererChampsConjoint() {
                     <label><input type="radio" name="adresse-conjoint" value="autre"> Vit à une autre adresse</label>
                 </div>
 
-                <div class="adresse-container" id="adresse-conjoint-container">
+                <div class="adresse-container" id="adresse-conjoint-container" style="display: none;">
                     <h4>Si adresse différente, veuillez la renseigner ici</h4>
 
-                    <label>Numéro et rue </label>
-                    <input type="text" placeholder="Ex: 123 Rue Principale">
+                    <label>Numéro et rue <span style='color: red;'>*</span></label>
+                    <input type="text" name="conjoint-adresse" placeholder="Ex: 123 Rue Principale">
 
-                    <label>Ville </label>
-                    <input type="text" placeholder="Ex: Montréal">
+                    <label>Ville <span style='color: red;'>*</span></label>
+                    <input type="text" name="conjoint-ville" placeholder="Ex: Montréal">
 
-                    <label>Province </label>
-                    <select>
+                    <label>Province <span style='color: red;'>*</span></label>
+                    <select name="conjoint-province">
                         <option value="">Veuillez sélectionner votre province</option>
                         <option value="AB">Alberta</option>
                         <option value="BC">Colombie-Britannique</option>
@@ -269,11 +268,11 @@ function genererChampsConjoint() {
                         <option value="Autre">Autre</option>
                     </select>
 
-                    <label>Code Postal </label>
-                    <input type="text" pattern="[A-Za-z]\\d[A-Za-z] \\d[A-Za-z]\\d" placeholder="Ex: A1A 1A1">
+                    <label>Code Postal <span style='color: red;'>*</span></label>
+                    <input type="text" name="conjoint-codepostal" pattern="[A-Za-z]\\d[A-Za-z] \\d[A-Za-z]\\d" placeholder="Ex: A1A 1A1">
 
-                    <label>Pays </label>
-                    <select>
+                    <label>Pays <span style='color: red;'>*</span></label>
+                    <select name="conjoint-pays">
                         <option value="">Veuillez sélectionner votre pays</option>
                         <option value="Autre">Burkina Faso</option>
                         <option value="Autre">Burundi</option>
@@ -316,8 +315,8 @@ function genererChampsConjoint() {
     }
 
     // ✅ Gérer l'affichage de l'adresse selon le choix de l'utilisateur
-    const radioButtons = document.querySelectorAll(`input[name="adresse-conjoint"]`);
-    const adresseContainer = document.getElementById(`adresse-conjoint-container`);
+    const radioButtons = document.querySelectorAll("input[name='adresse-conjoint']");
+    const adresseContainer = document.getElementById(adresse-conjoint-container);
 
     radioButtons.forEach(radio => {
         radio.addEventListener("change", function () {
@@ -325,6 +324,7 @@ function genererChampsConjoint() {
         });
     });
 }
+
 
 // ✅ Fonction pour déterminer la prochaine section
 function getNextStep(step) {
@@ -431,30 +431,39 @@ function previousSection() {
 }
 
 // ✅ Gestion du téléversement multiple
-documentsInput.addEventListener("change", function () {
-    fileListContainer.innerHTML = ""; 
+document.getElementById("documents").addEventListener("change", function(event) {
+    let fileList = document.getElementById("file-list");
+    fileList.innerHTML = ""; // Nettoyage de la liste
 
-    if (documentsInput.files.length > 0) {
-        for (const file of documentsInput.files) {
-            const listItem = document.createElement("li");
-            listItem.textContent = file.name; 
+    Array.from(event.target.files).forEach(file => {
+        let fileType = file.name.split('.').pop().toLowerCase();
+        let icon = getFileIcon(fileType);
 
-            // ✅ Ajout d'un bouton pour supprimer un fichier de la liste
-            const removeButton = document.createElement("button");
-            removeButton.textContent = "❌";
-            removeButton.style.marginLeft = "10px";
-            removeButton.style.cursor = "pointer";
+        let fileItem = document.createElement("div");
+        fileItem.classList.add("file-item");
+        fileItem.innerHTML = `<i class="${icon}"></i> ${file.name}`;
 
-            // ✅ Suppression du fichier de la liste visuelle (ne supprime pas réellement du input)
-            removeButton.addEventListener("click", function () {
-                listItem.remove();
-            });
-
-            listItem.appendChild(removeButton);
-            fileListContainer.appendChild(listItem);
-        }
-    }
+        fileList.appendChild(fileItem);
+    });
 });
+
+function getFileIcon(extension) {
+    const icons = {
+        "pdf": "fas fa-file-pdf",
+        "doc": "fas fa-file-word",
+        "docx": "fas fa-file-word",
+        "xls": "fas fa-file-excel",
+        "xlsx": "fas fa-file-excel",
+        "png": "fas fa-file-image",
+        "jpg": "fas fa-file-image",
+        "jpeg": "fas fa-file-image",
+        "txt": "fas fa-file-alt",
+        "zip": "fas fa-file-archive"
+    };
+
+    return icons[extension] || "fas fa-file";
+}
+
 
 // ✅ Gestion de la soumission du formulaire (Compatible Netlify)
 function submitForm(event) {
@@ -510,24 +519,11 @@ document.addEventListener("DOMContentLoaded", function () {
     updateStepVisibility();
 });
 
-document.addEventListener("DOMContentLoaded", function () {
-    // Sélectionne tous les labels et vérifie si le champ correspondant est "required"
-    const labels = document.querySelectorAll("label");
-
-    labels.forEach(label => {
-        let input = label.closest(".form-group")?.querySelector("input, select, textarea");
-        
-        if (input) {
-            let requiredSpan = label.querySelector(".required-star");
-            if (input.required) {
-                if (!requiredSpan) {
-                    label.innerHTML += " <span class='required-star' style='color: red;'>*</span>";
-                }
-            } else {
-                if (requiredSpan) {
-                    requiredSpan.remove(); 
-                }
-            }
+document.addEventListener("DOMContentLoaded", function() {
+    document.querySelectorAll("input[required], select[required], textarea[required]").forEach(field => {
+        let label = field.closest(".form-group").querySelector("label");
+        if (label && !label.innerHTML.includes("*")) {
+            label.innerHTML += " <span style='color: red;'>*</span>";
         }
     });
 });
