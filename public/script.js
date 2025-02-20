@@ -479,7 +479,7 @@ function submitForm(event) {
     console.log("Données du formulaire envoyées :", formObject);
 
     // 🔹 Envoi des données au serveur
-    fetch("http://localhost:5000/send-email", {
+    fetch("/api/send-email", {
         method: "POST",
         body: formData,
     })
