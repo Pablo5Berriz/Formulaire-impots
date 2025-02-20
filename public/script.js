@@ -504,8 +504,6 @@ function submitForm(event) {
 // ✅ Ajout de l'écouteur d'événement
 document.getElementById("taxForm").addEventListener("submit", submitForm);
 
-
-
 // ✅ Ajout des événements aux boutons
 nextButton.addEventListener("click", () => { 
     if (validateSection(currentStep)) { 
