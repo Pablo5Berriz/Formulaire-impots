@@ -8,6 +8,12 @@ export default async function handler(req, res) {
   try {
     const formData = req.body;
 
+    // ✅ Vérifier que les variables d'environnement sont disponibles
+    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+      console.error("❌ Variables d'environnement manquantes");
+      return res.status(500).json({ message: "Variables d'environnement manquantes" });
+    }
+
     // ✅ Configuration du transporteur Gmail
     const transporter = nodemailer.createTransport({
       service: "gmail",
@@ -18,25 +24,25 @@ export default async function handler(req, res) {
     });
 
     // ✅ Construire le message avec toutes les informations du formulaire
-    let message = `<h2>Vous avez reçu un nouveau formulaire de déclaration d'impôts</h2>`;
+    let message = `<h2>Nouveau formulaire soumis</h2>`;
     for (let key in formData) {
-      message += `<p><strong>${key} :</strong> ${formData[key]}</p>`;
+      message += `<p><strong>${key}:</strong> ${formData[key]}</p>`;
     }
 
-    // ✅ Paramètres de l'email
+    // ✅ Configuration du mail
     const mailOptions = {
       from: `"Comptaclems" <${process.env.EMAIL_USER}>`,
       to: process.env.EMAIL_USER,
-      subject: `Nouvelle déclaration d'impôts de ${formData.prenom || "Inconnu"} ${formData.nom_famille || ""}`,
+      subject: `Formulaire soumis par ${formData.prenom || "Inconnu"} ${formData.nom_famille || ""}`,
       html: message,
     };
 
-    // ✅ Envoi de l'email
+    // ✅ Envoyer l'email
     await transporter.sendMail(mailOptions);
 
     res.status(200).json({ success: true, message: "Email envoyé avec succès !" });
   } catch (error) {
-    console.error("❌ Erreur d'envoi d'email :", error);
-    res.status(500).json({ success: false, message: "Erreur lors de l'envoi de l'email." });
+    console.error("❌ Erreur lors de l'envoi de l'email :", error);
+    res.status(500).json({ success: false, message: `Erreur serveur: ${error.message}` });
   }
 }
