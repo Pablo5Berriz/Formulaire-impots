@@ -464,30 +464,34 @@ function getFileIcon(extension) {
     return icons[extension] || "fas fa-file";
 }
 
+// ✅ Gestion de la soumission du formulaire
+document.getElementById("taxForm").addEventListener("submit", function (event) {
+    event.preventDefault();
 
-// ✅ Gestion de la soumission du formulaire (Compatible Netlify)
-function submitForm(event) {
-    // ✅ Vérification des champs obligatoires
-    let form = document.getElementById("taxForm");
-    let formData = new FormData(form);
+    let formData = new FormData(event.target);
+    let formObject = {};
+    formData.forEach((value, key) => {
+        formObject[key] = value;
+    });
 
-    // ✅ Envoi du formulaire directement à Netlify
-    fetch(form.action, {
+    fetch("http://localhost:5000/send-email", {
         method: "POST",
-        body: formData
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formObject),
     })
-    .then(response => {
-        if (response.ok) {
-            window.location.href = "/confirmation.html"; // Redirection après succès
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert("✅ Email envoyé avec succès !");
+            event.target.reset();
         } else {
-            alert("❌ Une erreur est survenue lors de l'envoi. Veuillez réessayer.");
+            alert("❌ Échec de l'envoi de l'email.");
         }
     })
-    .catch(error => {
-        console.error("Erreur lors de l'envoi du formulaire :", error);
-        alert("❌ Impossible d'envoyer le formulaire. Vérifiez votre connexion.");
-    });
-}
+    .catch(error => console.error("Erreur :", error));
+});
 
 // ✅ Ajout des événements aux boutons
 nextButton.addEventListener("click", () => { 
