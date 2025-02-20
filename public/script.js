@@ -480,8 +480,11 @@ function submitForm(event) {
 
     // 🔹 Envoi des données au serveur
     fetch("/api/send-email", {
-        method: "POST",
-        body: formData,
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formObject),
     })
     .then(response => response.json())
     .then(data => {
