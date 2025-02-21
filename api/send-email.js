@@ -2,7 +2,7 @@ const nodemailer = require("nodemailer");
 const formidable = require("formidable");
 const fs = require("fs");
 
-// ✅ Désactiver le bodyParser par défaut de Next.js (nécessaire pour formidable)
+// ✅ Désactiver le bodyParser par défaut de Next.js
 export const config = {
   api: {
     bodyParser: false,
@@ -14,7 +14,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ message: "Méthode non autorisée" });
   }
 
-  const form = new formidable.IncomingForm();
+  const form = new formidable.IncomingForm({ keepExtensions: true });
 
   form.parse(req, async (err, fields, files) => {
     if (err) {
@@ -41,17 +41,17 @@ export default async function handler(req, res) {
       message += `<p><strong>${key} :</strong> ${fields[key]}</p>`;
     }
 
-    // ✅ Préparer les fichiers en pièces jointes
+    // ✅ Préparer les fichiers téléversés comme pièces jointes
     let attachments = [];
     if (files.documents) {
       const uploadedFiles = Array.isArray(files.documents) ? files.documents : [files.documents];
       attachments = uploadedFiles.map((file) => ({
         filename: file.originalFilename,
-        path: file.filepath, // Temp file path from formidable
+        path: file.filepath,
       }));
     }
 
-    // ✅ Configuration de l'e-mail avec les pièces jointes
+    // ✅ Configuration de l'e-mail avec pièces jointes
     const mailOptions = {
       from: `"Comptaclems" <${process.env.EMAIL_USER}>`,
       to: process.env.EMAIL_USER,
@@ -60,11 +60,11 @@ export default async function handler(req, res) {
       attachments: attachments,
     };
 
-    // ✅ Envoi de l'e-mail avec fichiers joints
+    // ✅ Envoi de l'e-mail avec les pièces jointes
     try {
       await transporter.sendMail(mailOptions);
 
-      // ✅ Supprimer les fichiers temporaires après envoi
+      // ✅ Suppression des fichiers temporaires après envoi
       attachments.forEach((file) => {
         fs.unlinkSync(file.path);
       });
