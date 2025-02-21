@@ -466,43 +466,37 @@ function getFileIcon(extension) {
 
 // ✅ Gestion de la soumission du formulaire
 function submitForm(event) {
-    event.preventDefault(); 
+  event.preventDefault();
 
-    let formData = new FormData(document.getElementById("taxForm"));
-    let formObject = {};
-    
-    formData.forEach((value, key) => {
-        formObject[key] = value;
-    });
+  let formElement = document.getElementById("taxForm");
+  let formData = new FormData(formElement);
 
-    // 🔹 Vérifiez les valeurs en console
-    console.log("Données du formulaire envoyées :", formObject);
+  // 🔹 Vérifiez les valeurs en console
+  console.log("Données du formulaire envoyées :", formData);
 
-    // 🔹 Envoi des données au serveur
-    fetch("/api/send-email", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formObject),
+  // 🔹 Envoi des données au serveur
+  fetch("/api/send-email", {
+    method: "POST",
+    body: formData, // Pas besoin de définir Content-Type, il sera automatiquement multipart/form-data
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.success) {
+        alert("✅ Email envoyé avec succès !");
+        formElement.reset();
+
+        // 🔹 Redirection vers la page de confirmation
+        window.location.href = "confirmation.html";
+      } else {
+        alert("❌ Échec de l'envoi de l'email.");
+      }
     })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            alert("✅ Email envoyé avec succès !");
-            document.getElementById("taxForm").reset(); 
-            
-            // 🔹 Redirection vers la page confirmation.html après soumission
-            window.location.href = "confirmation.html"; 
-        } else {
-            alert("❌ Échec de l'envoi de l'email.");
-        }
-    })
-    .catch(error => console.error("Erreur lors de l'envoi :", error));
+    .catch((error) => console.error("Erreur lors de l'envoi :", error));
 }
 
 // ✅ Ajout de l'écouteur d'événement
 document.getElementById("taxForm").addEventListener("submit", submitForm);
+
 
 // ✅ Ajout des événements aux boutons
 nextButton.addEventListener("click", () => { 
